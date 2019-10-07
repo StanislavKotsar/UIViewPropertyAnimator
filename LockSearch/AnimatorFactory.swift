@@ -25,7 +25,7 @@ class AnimatorFactory {
     return scale
   }
   
-   @discardableResult static func jiggle(view: UIView) -> UIViewPropertyAnimator {
+  static func jiggle(view: UIView) -> UIViewPropertyAnimator {
     return UIViewPropertyAnimator.runningPropertyAnimator(
       withDuration: 0.33, delay: 0, animations: {
         UIView.animateKeyframes(withDuration: 1, delay: 0,
@@ -50,6 +50,16 @@ class AnimatorFactory {
       completion: {_ in
         view.transform = .identity
       }
+    )
+  }
+  
+  static func fade(in view: UIView, _ visible: Bool) {
+    UIViewPropertyAnimator.runningPropertyAnimator(
+      withDuration: 0.5, delay: 0.1, options: .curveEaseOut,
+      animations: {
+        view.alpha = visible ? 1 : 0
+      },
+      completion: nil
     )
   }
   
