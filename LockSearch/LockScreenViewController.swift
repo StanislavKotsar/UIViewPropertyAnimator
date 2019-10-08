@@ -38,8 +38,6 @@ class LockScreenViewController: UIViewController {
     super.viewDidLoad()
 
     view.bringSubviewToFront(searchBar)
-    blurView.effect = UIBlurEffect(style: .dark)
-    blurView.alpha = 0
     blurView.isUserInteractionEnabled = false
     view.insertSubview(blurView, belowSubview: searchBar)
 
@@ -50,6 +48,7 @@ class LockScreenViewController: UIViewController {
   override func viewWillAppear(_ animated: Bool) {
     tableView.transform = CGAffineTransform(scaleX: 0.67, y: 0.67)
     tableView.alpha = 0
+
   }
   
   override func viewDidAppear(_ animated: Bool) {
@@ -95,16 +94,33 @@ extension LockScreenViewController: UITableViewDataSource {
       return cell
     }
   }
+  
+  func blurAnimations(_ blurred: Bool) -> () -> Void {
+    return {
+      self.blurView.effect = blurred ?
+        UIBlurEffect(style: .dark) : nil
+      self.tableView.transform = blurred ?
+        CGAffineTransform(scaleX: 0.75, y: 0.75) : .identity
+      self.tableView.alpha = blurred ? 0.33 : 1.0
+    }
+  }
+  
+  func toggleBlur(_ blurred: Bool) {
+    UIViewPropertyAnimator(duration: 0.55, curve: .easeOut,
+      animations: blurAnimations(blurred))
+      .startAnimation()
+  }
+  
 }
 
 extension LockScreenViewController: UISearchBarDelegate {
 
   func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-    AnimatorFactory.fade(in: blurView, true)
+    toggleBlur(true)
   }
 
   func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-    AnimatorFactory.fade(in: blurView, false)
+    toggleBlur(false)
   }
   
   func searchBarResultsListButtonClicked(_ searchBar: UISearchBar) {
