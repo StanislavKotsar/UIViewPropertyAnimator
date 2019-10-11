@@ -48,12 +48,16 @@ class LockScreenViewController: UIViewController {
   override func viewWillAppear(_ animated: Bool) {
     tableView.transform = CGAffineTransform(scaleX: 0.67, y: 0.67)
     tableView.alpha = 0
-
+    dateTopConstraint.constant -= 100
+    view.layoutIfNeeded()
   }
   
   override func viewDidAppear(_ animated: Bool) {
     AnimatorFactory.scaleUp(view: tableView)
         .startAnimation()
+    AnimatorFactory.animateConstraint(view: view,
+      constraint: dateTopConstraint, by: 100)
+      .startAnimation()
   }
 
   override func viewWillLayoutSubviews() {
