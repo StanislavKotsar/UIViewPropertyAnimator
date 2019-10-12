@@ -52,9 +52,20 @@ class WidgetCell: UITableViewCell {
     }
     let spring = UISpringTimingParameters(mass: 30, stiffness: 1000,
       damping: 300, initialVelocity: CGVector(dx: 5, dy: 0))
-
+    let textTransition = {
+      UIView.transition(with: sender, duration: 0.25,
+        options: .transitionFlipFromTop,
+        animations: {
+          sender.setTitle(
+            self.showsMore ? "Show Less" : "Show More",
+            for: .normal)
+        },
+        completion: nil
+      )
+    }
     toggleHeightAnimator = UIViewPropertyAnimator(duration: 0.0, timingParameters: spring)
     toggleHeightAnimator?.addAnimations(animations)
+    toggleHeightAnimator?.addAnimations(textTransition, delayFactor: 0.5)
     toggleHeightAnimator?.startAnimation()
     widgetView.expanded = showsMore
     widgetView.reload()
