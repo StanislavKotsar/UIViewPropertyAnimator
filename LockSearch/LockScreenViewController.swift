@@ -29,6 +29,10 @@ class LockScreenViewController: UIViewController {
   @IBOutlet weak var searchBar: UISearchBar!
   @IBOutlet weak var tableView: UITableView!
   @IBOutlet weak var dateTopConstraint: NSLayoutConstraint!
+  var startFrame: CGRect?
+  var previewView: UIView?
+  var previewAnimator: UIViewPropertyAnimator?
+  let previewEffectView = IconEffectView(blur: .extraLight)
 
   let blurView = UIVisualEffectView(effect: nil)
 
@@ -76,7 +80,13 @@ class LockScreenViewController: UIViewController {
   
 }
 
-extension LockScreenViewController: WidgetsOwnerProtocol { }
+extension LockScreenViewController: WidgetsOwnerProtocol {
+  func startPreview(for forView: UIView) {
+    previewView?.removeFromSuperview()
+    previewView = forView.snapshotView(afterScreenUpdates: false)
+    view.insertSubview(previewView!, aboveSubview: blurView)
+  }
+}
 
 extension LockScreenViewController: UITableViewDataSource {
 
