@@ -77,4 +77,29 @@ class AnimatorFactory {
     return animator
   }
   
+  static func grow(view: UIVisualEffectView,
+    blurView: UIVisualEffectView) -> UIViewPropertyAnimator {
+
+    // 1
+    view.contentView.alpha = 0
+    view.transform = .identity
+
+    // 2
+    let animator = UIViewPropertyAnimator(
+      duration: 0.5, curve: .easeIn)
+
+    // 3
+    animator.addAnimations {
+      blurView.effect = UIBlurEffect(style: .dark)
+      view.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+    }
+
+    // 4
+    animator.addCompletion { _ in
+      blurView.effect = UIBlurEffect(style: .dark)
+    }
+    
+    return animator
+  }
+  
 }

@@ -97,6 +97,13 @@ extension LockScreenViewController: WidgetsOwnerProtocol {
     previewView?.frame = forView.convert(forView.bounds, to: view)
     startFrame = previewView?.frame
     addEffectView(below: previewView!)
+    previewAnimator = AnimatorFactory.grow(view: previewEffectView,
+      blurView: blurView)
+  }
+  
+  func updatePreview(percent: CGFloat) {
+    previewAnimator?.fractionComplete =
+      max(0.01, min(0.99, percent))
   }
 }
 
