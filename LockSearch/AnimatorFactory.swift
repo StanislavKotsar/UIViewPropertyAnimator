@@ -95,11 +95,31 @@ class AnimatorFactory {
     }
 
     // 4
-    animator.addCompletion { _ in
-      blurView.effect = UIBlurEffect(style: .dark)
+    animator.addCompletion { position in
+      switch position {
+        case .start:
+          blurView.effect = nil
+        case .end:
+          blurView.effect = UIBlurEffect(style: .dark)
+        default: break
+      }
     }
     
     return animator
+  }
+  
+  static func reset(frame: CGRect, view: UIVisualEffectView,
+    blurView: UIVisualEffectView) -> UIViewPropertyAnimator {
+
+    return UIViewPropertyAnimator(duration: 0.5,
+      dampingRatio: 0.7) {
+
+      view.transform = .identity
+      view.frame = frame
+      view.contentView.alpha = 0
+
+      blurView.effect = nil
+    }
   }
   
 }

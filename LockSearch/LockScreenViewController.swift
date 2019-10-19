@@ -105,6 +105,13 @@ extension LockScreenViewController: WidgetsOwnerProtocol {
     previewAnimator?.fractionComplete =
       max(0.01, min(0.99, percent))
   }
+  
+  func cancelPreview() {
+    if let previewAnimator = previewAnimator {
+      previewAnimator.isReversed = true
+      previewAnimator.startAnimation()
+    }
+  }
 }
 
 extension LockScreenViewController: UITableViewDataSource {
