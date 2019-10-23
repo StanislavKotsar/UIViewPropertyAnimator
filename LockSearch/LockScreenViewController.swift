@@ -47,6 +47,8 @@ class LockScreenViewController: UIViewController {
 
     tableView.estimatedRowHeight = 130.0
     tableView.rowHeight = UITableView.automaticDimension
+    
+    previewEffectView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissMenu)))
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -86,6 +88,16 @@ class LockScreenViewController: UIViewController {
       belowSubview: forView)
   }
   
+  @objc func dismissMenu(sender: UIView) {
+    let animator = AnimatorFactory.reset(frame: startFrame!, view: previewEffectView, blurView: blurView)
+    animator.addCompletion { (reverse) in
+      self.blurView.isUserInteractionEnabled = false
+      self.previewEffectView.removeFromSuperview()
+      self.previewView?.removeFromSuperview()
+    }
+    animator.startAnimation()
+  }
+  
 }
 
 extension LockScreenViewController: WidgetsOwnerProtocol {
@@ -97,6 +109,7 @@ extension LockScreenViewController: WidgetsOwnerProtocol {
     previewView?.frame = forView.convert(forView.bounds, to: view)
     startFrame = previewView?.frame
     addEffectView(below: previewView!)
+    
     previewAnimator = AnimatorFactory.grow(view: previewEffectView,
       blurView: blurView)
   }
@@ -110,8 +123,36 @@ extension LockScreenViewController: WidgetsOwnerProtocol {
     if let previewAnimator = previewAnimator {
       previewAnimator.isReversed = true
       previewAnimator.startAnimation()
+      previewAnimator.addCompletion { position in
+        switch position {
+          case .start:
+            self.previewView?.removeFromSuperview()
+            self.previewEffectView.removeFromSuperview()
+          default: break
+        }
+      }
     }
   }
+  
+  func finishPreview() {
+    // 1
+    previewAnimator?.stopAnimation(false)
+
+    // 2
+    previewAnimator?.finishAnimation(at: .end)
+
+    // 3
+    previewAnimator = nil
+    
+    AnimatorFactory.complete(view: previewEffectView)
+      .startAnimation()
+    
+    blurView.effect = UIBlurEffect(style: .dark)
+    blurView.isUserInteractionEnabled = true
+    blurView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissMenu)))
+    
+  }
+  
 }
 
 extension LockScreenViewController: UITableViewDataSource {

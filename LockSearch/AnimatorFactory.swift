@@ -85,8 +85,7 @@ class AnimatorFactory {
     view.transform = .identity
 
     // 2
-    let animator = UIViewPropertyAnimator(
-      duration: 0.5, curve: .easeIn)
+    let animator = UIViewPropertyAnimator(duration: 0.5, curve: .easeIn)
 
     // 3
     animator.addAnimations {
@@ -119,6 +118,20 @@ class AnimatorFactory {
       view.contentView.alpha = 0
 
       blurView.effect = nil
+    }
+  }
+  
+  static func complete(view: UIVisualEffectView) -> UIViewPropertyAnimator {
+    return UIViewPropertyAnimator(duration: 0.3,
+      dampingRatio: 0.7) {
+      view.contentView.alpha = 1
+      view.transform = .identity
+      view.frame = CGRect(
+        x: view.frame.minX - view.frame.minX/2.5,
+        y: view.frame.maxY - 140,
+        width: view.frame.width + 120,
+        height: 60
+      )
     }
   }
   
