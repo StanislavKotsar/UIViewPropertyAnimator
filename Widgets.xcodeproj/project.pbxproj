@@ -20,6 +20,7 @@
 		9CF4C0F11DAE5D0900F4E30A /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CF4C0F01DAE5D0900F4E30A /* SettingsViewController.swift */; };
 		9CF4C0F51DAE912000F4E30A /* FooterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CF4C0F41DAE912000F4E30A /* FooterCell.swift */; };
 		DF146F682349172D00BBCC04 /* AnimatorFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF146F672349172D00BBCC04 /* AnimatorFactory.swift */; };
+		DF57E1172370AD4C00B915B5 /* PresentTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF57E1162370AD4C00B915B5 /* PresentTransition.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		9CF4C0F01DAE5D0900F4E30A /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		9CF4C0F41DAE912000F4E30A /* FooterCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FooterCell.swift; sourceTree = "<group>"; };
 		DF146F672349172D00BBCC04 /* AnimatorFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatorFactory.swift; sourceTree = "<group>"; };
+		DF57E1162370AD4C00B915B5 /* PresentTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentTransition.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +108,7 @@
 				9CF8DFCB1DAFBD8100060AC5 /* Lock Screen View Controller */,
 				9C3A2E351DAFBDEC00384C68 /* Settings View Controller */,
 				9C9E23F51DAD251B004749FD /* AppDelegate.swift */,
+				DF57E1162370AD4C00B915B5 /* PresentTransition.swift */,
 			);
 			name = Widgets;
 			path = LockSearch;
@@ -201,6 +204,7 @@
 				DF146F682349172D00BBCC04 /* AnimatorFactory.swift in Sources */,
 				9C7446771DB2995E0075364A /* WidgetsOwnerProtocol.swift in Sources */,
 				9CF4C0F51DAE912000F4E30A /* FooterCell.swift in Sources */,
+				DF57E1172370AD4C00B915B5 /* PresentTransition.swift in Sources */,
 				9C125E081DAEEFBF00E352C1 /* IconCell.swift in Sources */,
 				9C9E23F81DAD251B004749FD /* LockScreenViewController.swift in Sources */,
 				9C9E23F61DAD251B004749FD /* AppDelegate.swift in Sources */,

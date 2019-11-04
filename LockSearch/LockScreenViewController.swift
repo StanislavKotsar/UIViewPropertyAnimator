@@ -35,7 +35,7 @@ class LockScreenViewController: UIViewController {
   let previewEffectView = IconEffectView(blur: .extraLight)
 
   let blurView = UIVisualEffectView(effect: nil)
-
+  let presentTransition = PresentTransition()
   var settingsController: SettingsViewController!
 
   override func viewDidLoad() {
@@ -76,7 +76,12 @@ class LockScreenViewController: UIViewController {
 
   @IBAction func presentSettings(_ sender: Any? = nil) {
     //present the view controller
+    presentTransition.auxAnimations = blurAnimations(true)
     settingsController = storyboard?.instantiateViewController(withIdentifier: "SettingsViewController") as? SettingsViewController
+    settingsController.transitioningDelegate = self
+    settingsController.didDismiss = { [unowned self] in
+      self.toggleBlur(false)
+    }
     present(settingsController, animated: true, completion: nil)
   }
   
@@ -216,4 +221,18 @@ extension LockScreenViewController: UISearchBarDelegate {
     }
   }
   
+}
+
+extension LockScreenViewController:
+  UIViewControllerTransitioningDelegate {
+  
+  func animationController(
+    forPresented presented: UIViewController,
+    presenting: UIViewController, source: UIViewController) ->
+    UIViewControllerAnimatedTransitioning? {
+
+    return presentTransition
+
+  }
+
 }
