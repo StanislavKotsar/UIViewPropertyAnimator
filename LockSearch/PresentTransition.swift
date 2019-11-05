@@ -8,7 +8,8 @@
 
 import UIKit
 
-class PresentTransition: NSObject,
+class PresentTransition:
+  UIPercentDrivenInteractiveTransition,
   UIViewControllerAnimatedTransitioning {
   
   var auxAnimations: (()-> Void)?
@@ -44,10 +45,13 @@ class PresentTransition: NSObject,
       to.alpha = 1.0
     }, delayFactor: 0.5)
     
-    animator.addCompletion { _ in
-      transitionContext.completeTransition(
-        !transitionContext.transitionWasCancelled
-      )
+    animator.addCompletion { position in
+      switch position {
+      case .end:
+        transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+      default:
+        transitionContext.completeTransition(false)
+      }
     }
     
     if let auxAnimations = auxAnimations {
@@ -55,5 +59,11 @@ class PresentTransition: NSObject,
     }
     
     return animator
+  }
+  
+  func interruptibleAnimator(using transitionContext:
+    UIViewControllerContextTransitioning) -> UIViewImplicitlyAnimating {
+
+    return transitionAnimator(using: transitionContext)
   }
 }

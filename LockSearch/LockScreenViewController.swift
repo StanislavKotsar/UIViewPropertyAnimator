@@ -37,6 +37,9 @@ class LockScreenViewController: UIViewController {
   let blurView = UIVisualEffectView(effect: nil)
   let presentTransition = PresentTransition()
   var settingsController: SettingsViewController!
+  
+  var isDragging = false
+  var isPresentingSettings = false
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -170,6 +173,7 @@ extension LockScreenViewController: UITableViewDataSource {
     if indexPath.row == 1 {
       let cell = tableView.dequeueReusableCell(withIdentifier: "Footer") as! FooterCell
       cell.didPressEdit = {[unowned self] in
+        self.presentTransition.wantsInteractiveStart = false
         self.presentSettings()
       }
       return cell
@@ -234,5 +238,48 @@ extension LockScreenViewController:
     return presentTransition
 
   }
+  
+  func interactionControllerForPresentation(using animator:
+    UIViewControllerAnimatedTransitioning)
+    -> UIViewControllerInteractiveTransitioning? {
+    return presentTransition
+  }
+}
 
+extension LockScreenViewController: UIScrollViewDelegate {
+  func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+    isDragging = true
+  }
+  
+  func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    guard isDragging else {
+      return
+    }
+
+    if !isPresentingSettings && scrollView.contentOffset.y < -30 {
+      isPresentingSettings = true
+      presentTransition.wantsInteractiveStart = true
+      presentSettings()
+      return
+    }
+    
+    if isPresentingSettings {
+      let progress = max(0.0, min(1.0, ((-scrollView.contentOffset.y) - 30) / 90.0))
+      presentTransition.update(progress)
+    }
+    
+  }
+  
+  func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+    let progress = max(0.0, min(1.0, ((-scrollView.contentOffset.y) - 30) / 90.0))
+
+    if progress > 0.5 {
+      presentTransition.finish()
+    } else {
+      presentTransition.cancel()
+    }
+
+    isPresentingSettings = false
+    isDragging = false
+  }
 }
