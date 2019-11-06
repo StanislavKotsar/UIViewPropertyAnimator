@@ -37,6 +37,7 @@ class LockScreenViewController: UIViewController {
   let blurView = UIVisualEffectView(effect: nil)
   let presentTransition = PresentTransition()
   var settingsController: SettingsViewController!
+  var touchesStartPointY: CGFloat?
   
   var isDragging = false
   var isPresentingSettings = false
@@ -79,13 +80,14 @@ class LockScreenViewController: UIViewController {
 
   @IBAction func presentSettings(_ sender: Any? = nil) {
     //present the view controller
-    presentTransition.auxAnimations = blurAnimations(true)
-    settingsController = storyboard?.instantiateViewController(withIdentifier: "SettingsViewController") as? SettingsViewController
+//    presentTransition.auxAnimations = blurAnimations(true)
+    settingsController = storyboard!.instantiateViewController(withIdentifier: "SettingsViewController") as? SettingsViewController
     settingsController.transitioningDelegate = self
     settingsController.didDismiss = { [unowned self] in
       self.toggleBlur(false)
     }
-    present(settingsController, animated: true, completion: nil)
+    
+    present(settingsController!, animated: true, completion: nil)
   }
   
   func addEffectView(below forView: UIView) {
@@ -104,6 +106,36 @@ class LockScreenViewController: UIViewController {
       self.previewView?.removeFromSuperview()
     }
     animator.startAnimation()
+  }
+  
+  override func touchesBegan(_ touches: Set<UITouch>,
+    with event: UIEvent?) {
+    guard presentTransition.wantsInteractiveStart == false,
+      presentTransition.animator != nil else {
+      return
+    }
+
+    touchesStartPointY = touches.first!.location(in: view).y
+    presentTransition.interruptTransition()
+  }
+  
+  override func touchesMoved(_ touches: Set<UITouch>,
+    with event: UIEvent?) {
+    guard let startY = touchesStartPointY else {
+      return
+    }
+
+    let currentPoint = touches.first!.location(in: view).y
+    if currentPoint < startY - 40 {
+      touchesStartPointY = nil
+      presentTransition.animator?.addCompletion { _ in
+        self.blurView.effect = nil
+      }
+      presentTransition.cancel()
+    } else if currentPoint > startY + 40 {
+      touchesStartPointY = nil
+      presentTransition.finish()
+    }
   }
   
 }
