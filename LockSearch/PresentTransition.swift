@@ -19,7 +19,7 @@ class PresentTransition:
   
   func transitionDuration(using transitionContext:
     UIViewControllerContextTransitioning?) -> TimeInterval {
-    return 2
+    return 1
   }
 
   func animateTransition(using transitionContext:
@@ -35,15 +35,14 @@ class PresentTransition:
     let to = transitionContext.view(forKey: .to)!
 
     container.addSubview(to)
-    to.transform = CGAffineTransform(scaleX: 1, y: 1)
-      .concatenating(CGAffineTransform(translationX: 0.0, y: 200))
+    to.transform = CGAffineTransform(translationX: 0.0, y: 100)
     to.alpha = 0
     let animator = UIViewPropertyAnimator(duration: duration, curve: .easeOut)
 
     animator.addAnimations({
       
-      to.transform = CGAffineTransform(scaleX: 0.33, y: 0.33)
-      .concatenating(CGAffineTransform(translationX: 0.0, y: 100))
+      to.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
+        .concatenating(CGAffineTransform(translationX: 0.0, y: 200.0))
       
     }, delayFactor: 0.15)
 
